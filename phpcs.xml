@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ruleset name="WP Debug Viewer">
+    <description>WordPress Coding Standards for WP Debug Viewer plugin.</description>
+    <rule ref="WordPress" />
+    <rule ref="WordPress-Extra" />
+
+    <config name="testVersion" value="6.6-" />
+
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>node_modules/*</exclude-pattern>
+    <exclude-pattern>assets/js/*min.js</exclude-pattern>
+
+    <file>wp-debug-viewer.php</file>
+    <file>includes</file>
+    <file>assets</file>
+</ruleset>
