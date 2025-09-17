@@ -1,0 +1,217 @@
+# Distignore for WordPress.org SVN deployment
+# This file specifies files and directories to exclude from the plugin ZIP
+# when deploying to WordPress.org plugin directory via SVN
+
+# Version control
+.git/
+.svn/
+.gitignore
+.gitattributes
+.distignore
+
+# Build tools and dependencies
+node_modules/
+package.json
+package-lock.json
+yarn.lock
+composer.json
+composer.lock
+vendor/
+Gruntfile.js
+gulpfile.js
+webpack.config.js
+rollup.config.js
+vite.config.js
+
+# Development assets and source files
+src/
+dev/
+development/
+scss/
+sass/
+less/
+*.scss
+*.sass
+*.less
+
+# Build outputs that shouldn't be distributed
+build/
+dist/
+.cache/
+
+# Documentation (development specific)
+CHANGELOG.md
+CONTRIBUTING.md
+DEVELOPER.md
+TESTING.md
+TODO.md
+docs/
+doc/
+
+# Testing
+tests/
+test/
+spec/
+phpunit.xml
+phpunit.xml.dist
+.phpunit.result.cache
+*.test.js
+*.spec.js
+
+# Code quality tools
+.eslintrc
+.eslintrc.js
+.eslintrc.json
+.jshintrc
+.stylelintrc
+.stylelintrc.json
+phpcs.xml
+phpcs.xml.dist
+.phpcs.xml
+.editorconfig
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.history/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+.codecov.yml
+appveyor.yml
+
+# Logs and temporary files
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+error_log
+tmp/
+temp/
+cache/
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# WordPress specific development files
+wp-cli.yml
+wp-config-sample.php
+wp-config-local.php
+
+# Environment and security files
+.env
+.env.*
+*.pem
+*.key
+*.crt
+.htaccess
+.htpasswd
+
+# SVN specific (WordPress.org structure)
+tags/
+branches/
+trunk/
+
+# Plugin development specific
+debug-tools/
+development-tools/
+build-tools/
+
+# Minified files that have source maps
+*.min.js.map
+*.min.css.map
+*.css.map
+*.js.map
+
+# Source maps
+*.map
+
+# Lock files
+*.lock
+
+# Temporary build files
+*.tmp
+*.temp
+
+# Coverage reports
+coverage/
+*.lcov
+.nyc_output
+
+# Editor configs
+.editorconfig
+
+# Linting configs
+.eslintignore
+.stylelintignore
+
+# Node.js
+.npm
+.node_repl_history
+
+# Yarn
+.yarn-integrity
+
+# Development scripts
+scripts/dev/
+scripts/development/
+scripts/build/
+
+# Test fixtures
+fixtures/
+__tests__/
+__mocks__/
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Vagrant
+Vagrantfile
+.vagrant/
+
+# Local development
+local-config.php
+wp-config-local.php
+
+# Claude Code specific
+.claude/
+.history/
+CLAUDE.md
+REVIEW.md
+NETSERVICE.md
+WORDPRESS.md
+AGENTS.md
+LICENSE
+
+build/

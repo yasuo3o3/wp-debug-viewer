@@ -1,0 +1,175 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.php text
+*.js text
+*.css text
+*.html text
+*.xml text
+*.json text
+*.md text
+*.txt text
+*.yml text
+*.yaml text
+*.ini text
+*.sql text
+
+# Declare files that will always have CRLF line endings on checkout.
+*.bat text eol=crlf
+
+# Declare files that will always have LF line endings on checkout.
+*.sh text eol=lf
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.flv binary
+*.fla binary
+*.swf binary
+*.gz binary
+*.zip binary
+*.7z binary
+*.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+*.svg binary
+*.pdf binary
+
+# Archives
+*.zip export-ignore
+*.tar export-ignore
+*.tar.gz export-ignore
+*.rar export-ignore
+
+# Development files - exclude from distribution
+.editorconfig export-ignore
+.eslintrc export-ignore
+.eslintrc.js export-ignore
+.eslintrc.json export-ignore
+.jshintrc export-ignore
+.stylelintrc export-ignore
+.stylelintrc.json export-ignore
+
+# Node.js
+package.json export-ignore
+package-lock.json export-ignore
+yarn.lock export-ignore
+node_modules/ export-ignore
+npm-debug.log* export-ignore
+
+# Build tools
+webpack.config.js export-ignore
+gulpfile.js export-ignore
+Gruntfile.js export-ignore
+rollup.config.js export-ignore
+vite.config.js export-ignore
+
+# PHP tools
+composer.json export-ignore
+composer.lock export-ignore
+vendor/ export-ignore
+phpunit.xml export-ignore
+phpunit.xml.dist export-ignore
+phpcs.xml export-ignore
+phpcs.xml.dist export-ignore
+.phpcs.xml export-ignore
+.phpunit.result.cache export-ignore
+
+# IDE and Editor files
+.vscode/ export-ignore
+.idea/ export-ignore
+*.sublime-project export-ignore
+*.sublime-workspace export-ignore
+.editorconfig export-ignore
+.history/ export-ignore
+
+# OS files
+.DS_Store export-ignore
+Thumbs.db export-ignore
+desktop.ini export-ignore
+
+# Documentation (development)
+CHANGELOG.md export-ignore
+CONTRIBUTING.md export-ignore
+DEVELOPER.md export-ignore
+TESTING.md export-ignore
+TODO.md export-ignore
+docs/ export-ignore
+
+AGENTS.md export-ignore
+CLAUDE.md export-ignore
+NETSERVICE.md export-ignore
+WORDPRESS.md export-ignore
+
+# Testing
+tests/ export-ignore
+test/ export-ignore
+spec/ export-ignore
+.phpunit.result.cache export-ignore
+
+# CI/CD
+.github/ export-ignore
+.gitlab-ci.yml export-ignore
+.travis.yml export-ignore
+.circleci/ export-ignore
+.codecov.yml export-ignore
+appveyor.yml export-ignore
+
+# Logs and temporary files
+*.log export-ignore
+logs/ export-ignore
+tmp/ export-ignore
+temp/ export-ignore
+cache/ export-ignore
+.cache/ export-ignore
+
+# WordPress specific development files
+wp-cli.yml export-ignore
+wp-config-sample.php export-ignore
+wp-config-local.php export-ignore
+
+# Backup files
+*.bak export-ignore
+*.backup export-ignore
+*~ export-ignore
+
+# Assets that should not be in distribution
+src/ export-ignore
+dev/ export-ignore
+development/ export-ignore
+
+# SVN directories
+.svn/ export-ignore
+
+# Git directories (should not happen but just in case)
+.git/ export-ignore
+
+# Security and environment files
+.env export-ignore
+.env.* export-ignore
+*.pem export-ignore
+*.key export-ignore
+*.crt export-ignore
+
+# SVN specific files
+tags/ export-ignore
+branches/ export-ignore
+trunk/ export-ignore
+
+docs/ export-ignore
+
+# Claude Code specific
+.claude/ export-ignore
+.history/ export-ignore
+
+debug-tools/ export-ignore
+
