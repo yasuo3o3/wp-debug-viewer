@@ -351,7 +351,7 @@ class Of_Wpdv_Admin {
         echo '</header>';
 
         echo '<div class="of-wpdv-status" id="of-wpdv-status" aria-live="polite"></div>';
-        echo '<textarea id="of-wpdv-log" class="of-wpdv-log" rows="20" readonly="readonly"></textarea>';
+        echo '<textarea id="of-wpdv-log" class="of-wpdv-log" rows="40" readonly="readonly"></textarea>';
         echo '<footer class="of-wpdv-footer">';
         echo '<div class="of-wpdv-stats" id="of-wpdv-stats"></div>';
         if ( ! empty( $permissions['reasons']['clear'] ) || ! empty( $permissions['reasons']['download'] ) ) {

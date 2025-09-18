@@ -60,7 +60,7 @@
     width: 100%;
     min-height: 320px;
     font-family: Consolas, Monaco, monospace;
-    background-color: #121212;
+    background-color: #121212 !important;
     color: #f5f5f5;
     padding: 12px;
 }
