@@ -237,7 +237,13 @@
     }
 
     initialise();
-    initCountdowns();
+
+    // DOMContentLoaded後にカウントダウンを初期化
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCountdowns);
+    } else {
+        initCountdowns();
+    }
 })();
 
 /**
@@ -245,13 +251,21 @@
  */
 function initCountdowns() {
     const countdownElements = document.querySelectorAll('.of-wpdv-countdown');
+    console.log('initCountdowns: Found', countdownElements.length, 'countdown elements');
 
     countdownElements.forEach(function(element) {
         const statusDisplay = element.closest('.of-wpdv-status-display');
-        if (!statusDisplay) return;
+        if (!statusDisplay) {
+            console.log('No status display found for countdown element');
+            return;
+        }
 
         const expiresTimestamp = parseInt(statusDisplay.dataset.expires, 10);
-        if (!expiresTimestamp) return;
+        console.log('Expires timestamp:', expiresTimestamp);
+        if (!expiresTimestamp) {
+            console.log('No valid expires timestamp');
+            return;
+        }
 
         function updateCountdown() {
             const now = Math.floor(Date.now() / 1000);

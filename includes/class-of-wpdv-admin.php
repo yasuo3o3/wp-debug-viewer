@@ -489,7 +489,7 @@ class Of_Wpdv_Admin {
         }
         echo '</form>';
 
-        if ( $override_active && $expires ) {
+        if ( $override_active && ! empty( $permissions['override_expires'] ) ) {
             echo '<div class="of-wpdv-status-display" data-expires="' . esc_attr( $permissions['override_expires'] ) . '">';
             echo '<span class="of-wpdv-status-active">' . esc_html__( '有効中:', 'wp-debug-viewer' ) . '</span> ';
             echo '<span class="of-wpdv-countdown" id="override-countdown"></span>';
@@ -531,7 +531,7 @@ class Of_Wpdv_Admin {
         }
         echo '</form>';
 
-        if ( $temp_logging_active && $expires ) {
+        if ( $temp_logging_active && ! empty( $permissions['temp_logging_expires'] ) ) {
             echo '<div class="of-wpdv-status-display" data-expires="' . esc_attr( $permissions['temp_logging_expires'] ) . '">';
             echo '<span class="of-wpdv-status-active">' . esc_html__( '有効中:', 'wp-debug-viewer' ) . '</span> ';
             echo '<span class="of-wpdv-countdown" id="temp-logging-countdown"></span>';
