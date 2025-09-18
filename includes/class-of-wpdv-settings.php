@@ -29,6 +29,8 @@ class Of_Wpdv_Settings {
             'enable_download'            => false,
             'allow_site_actions'         => false,
             'production_temp_expiration' => 0,
+            'temp_logging_enabled'       => false,
+            'temp_logging_expiration'    => 0,
         );
     }
 
@@ -49,6 +51,12 @@ class Of_Wpdv_Settings {
 
         if ( $settings['production_temp_expiration'] && $this->is_production_override_expired( (int) $settings['production_temp_expiration'] ) ) {
             $settings['production_temp_expiration'] = 0;
+            update_option( self::OPTION_NAME, $settings, false );
+        }
+
+        if ( $settings['temp_logging_expiration'] && $this->is_temp_logging_expired( (int) $settings['temp_logging_expiration'] ) ) {
+            $settings['temp_logging_enabled'] = false;
+            $settings['temp_logging_expiration'] = 0;
             update_option( self::OPTION_NAME, $settings, false );
         }
 
@@ -79,6 +87,11 @@ class Of_Wpdv_Settings {
         $existing = $this->get_settings();
         if ( ! empty( $existing['production_temp_expiration'] ) && ! $this->is_production_override_expired( (int) $existing['production_temp_expiration'] ) ) {
             $sanitized['production_temp_expiration'] = (int) $existing['production_temp_expiration'];
+        }
+
+        if ( ! empty( $existing['temp_logging_enabled'] ) && ! empty( $existing['temp_logging_expiration'] ) && ! $this->is_temp_logging_expired( (int) $existing['temp_logging_expiration'] ) ) {
+            $sanitized['temp_logging_enabled'] = true;
+            $sanitized['temp_logging_expiration'] = (int) $existing['temp_logging_expiration'];
         }
 
         return $sanitized;
@@ -134,6 +147,71 @@ class Of_Wpdv_Settings {
      */
     public function is_production_override_expired( $expiration ) {
         return empty( $expiration ) || $expiration <= current_time( 'timestamp' );
+    }
+
+    /**
+     * Check whether temporary logging is active.
+     *
+     * @return bool
+     */
+    public function is_temp_logging_active() {
+        $settings = $this->get_settings();
+        return ! empty( $settings['temp_logging_enabled'] ) && ! empty( $settings['temp_logging_expiration'] ) && $settings['temp_logging_expiration'] > current_time( 'timestamp' );
+    }
+
+    /**
+     * Check whether temporary logging has expired.
+     *
+     * @param int $expiration Timestamp.
+     * @return bool
+     */
+    public function is_temp_logging_expired( $expiration ) {
+        return empty( $expiration ) || $expiration <= current_time( 'timestamp' );
+    }
+
+    /**
+     * Enable temporary logging for 15 minutes.
+     *
+     * @return bool Success status.
+     */
+    public function enable_temp_logging() {
+        $settings = $this->get_settings();
+        $settings['temp_logging_enabled'] = true;
+        $settings['temp_logging_expiration'] = current_time( 'timestamp' ) + ( 15 * MINUTE_IN_SECONDS );
+
+        $updated = update_option( self::OPTION_NAME, $settings, false );
+
+        if ( $updated ) {
+            $this->apply_temp_logging_settings();
+        }
+
+        return $updated;
+    }
+
+    /**
+     * Disable temporary logging.
+     *
+     * @return bool Success status.
+     */
+    public function disable_temp_logging() {
+        $settings = $this->get_settings();
+        $settings['temp_logging_enabled'] = false;
+        $settings['temp_logging_expiration'] = 0;
+
+        return update_option( self::OPTION_NAME, $settings, false );
+    }
+
+    /**
+     * Apply PHP logging settings when temporary logging is enabled.
+     *
+     * @return void
+     */
+    private function apply_temp_logging_settings() {
+        if ( $this->is_temp_logging_active() ) {
+            ini_set( 'log_errors', '1' );
+            ini_set( 'error_log', WP_CONTENT_DIR . '/debug.log' );
+            error_reporting( E_ALL );
+        }
     }
 
     /**

@@ -28,6 +28,7 @@ class Of_Wpdv_Admin {
     public function __construct( Of_Wpdv_Plugin $plugin ) {
         $this->plugin = $plugin;
         add_action( 'admin_post_of_wpdv_toggle_prod_override', array( $this, 'handle_toggle_production_override' ) );
+        add_action( 'admin_post_of_wpdv_toggle_temp_logging', array( $this, 'handle_temp_logging_toggle' ) );
     }
 
     /**
@@ -386,6 +387,8 @@ class Of_Wpdv_Admin {
             $this->render_production_override_controls( $permissions );
         }
 
+        $this->render_temp_logging_controls( $permissions );
+
         echo '</section>';
     }
 
@@ -488,6 +491,38 @@ class Of_Wpdv_Admin {
     }
 
     /**
+     * Render temporary logging controls.
+     *
+     * @param array $permissions Permissions context.
+     * @return void
+     */
+    private function render_temp_logging_controls( array $permissions ) {
+        $temp_logging_active = ! empty( $permissions['temp_logging_active'] );
+        $expires = ! empty( $permissions['temp_logging_expires'] ) ? wp_date( 'Y/m/d H:i', (int) $permissions['temp_logging_expires'] ) : '';
+
+        echo '<div class="of-wpdv-card">';
+        echo '<h2>' . esc_html__( '一時的なログ出力', 'wp-debug-viewer' ) . '</h2>';
+        if ( $temp_logging_active && $expires ) {
+            echo '<p>' . esc_html( sprintf( __( '現在、一時ログ出力が有効です（%s まで）。', 'wp-debug-viewer' ), $expires ) ) . '</p>';
+        } else {
+            echo '<p>' . esc_html__( 'wp-configを変更せずに15分間だけログ出力を有効化できます。', 'wp-debug-viewer' ) . '</p>';
+        }
+
+        echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+        wp_nonce_field( 'of_wpdv_toggle_temp_logging' );
+        echo '<input type="hidden" name="action" value="of_wpdv_toggle_temp_logging">';
+        if ( $temp_logging_active ) {
+            echo '<input type="hidden" name="state" value="disable">';
+            submit_button( __( '一時ログ出力を停止', 'wp-debug-viewer' ), 'secondary', 'submit', false );
+        } else {
+            echo '<input type="hidden" name="state" value="enable">';
+            submit_button( __( '15分間ログ出力を有効化', 'wp-debug-viewer' ), 'primary', 'submit', false );
+        }
+        echo '</form>';
+        echo '</div>';
+    }
+
+    /**
      * Handle production override toggle.
      *
      * @return void
@@ -532,17 +567,24 @@ class Of_Wpdv_Admin {
      * @return void
      */
     private function maybe_render_notice() {
-        if ( empty( $_GET['of_wpdv_message'] ) ) {
-            return;
-        }
+        $override_message = isset( $_GET['override_message'] ) ? sanitize_key( $_GET['override_message'] ) : '';
+        $temp_logging_message = isset( $_GET['temp_logging_message'] ) ? sanitize_key( $_GET['temp_logging_message'] ) : '';
+        $legacy_message = isset( $_GET['of_wpdv_message'] ) ? sanitize_key( $_GET['of_wpdv_message'] ) : '';
 
-        $message_key = sanitize_key( $_GET['of_wpdv_message'] );
         $messages = array(
-            'prod_enabled'  => __( '本番環境で15分間の一時許可を有効化しました。', 'wp-debug-viewer' ),
-            'prod_disabled' => __( '本番環境での一時許可を解除しました。', 'wp-debug-viewer' ),
+            'prod_enabled'         => __( '本番環境で15分間の一時許可を有効化しました。', 'wp-debug-viewer' ),
+            'prod_disabled'        => __( '本番環境での一時許可を解除しました。', 'wp-debug-viewer' ),
+            'override_enabled'     => __( '本番環境での一時許可を有効にしました。', 'wp-debug-viewer' ),
+            'override_disabled'    => __( '本番環境での一時許可を解除しました。', 'wp-debug-viewer' ),
+            'override_error'       => __( '操作に失敗しました。', 'wp-debug-viewer' ),
+            'temp_logging_enabled' => __( '一時ログ出力を有効にしました（15分間）。', 'wp-debug-viewer' ),
+            'temp_logging_disabled'=> __( '一時ログ出力を無効にしました。', 'wp-debug-viewer' ),
+            'temp_logging_error'   => __( 'ログ出力設定の変更に失敗しました。', 'wp-debug-viewer' ),
         );
 
-        if ( isset( $messages[ $message_key ] ) ) {
+        $message_key = $override_message ?: $temp_logging_message ?: $legacy_message;
+
+        if ( ! empty( $message_key ) && isset( $messages[ $message_key ] ) ) {
             printf( '<div class="notice notice-success is-dismissible"><p>%s</p></div>', esc_html( $messages[ $message_key ] ) );
         }
     }
@@ -592,5 +634,43 @@ class Of_Wpdv_Admin {
                 'resumed'       => __( '自動更新を再開しました。', 'wp-debug-viewer' ),
             ),
         );
+    }
+
+    /**
+     * Handle temporary logging toggle.
+     *
+     * @return void
+     */
+    public function handle_temp_logging_toggle() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( esc_html__( 'この操作を実行する権限がありません。', 'wp-debug-viewer' ) );
+        }
+
+        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'of_wpdv_toggle_temp_logging' ) ) {
+            wp_die( esc_html__( '無効なリクエストです。', 'wp-debug-viewer' ) );
+        }
+
+        $state = sanitize_key( $_POST['state'] );
+        $settings = $this->plugin->get_settings();
+
+        if ( 'enable' === $state ) {
+            $success = $settings->enable_temp_logging();
+            $message = $success ? 'temp_logging_enabled' : 'temp_logging_error';
+        } else {
+            $success = $settings->disable_temp_logging();
+            $message = $success ? 'temp_logging_disabled' : 'temp_logging_error';
+        }
+
+        $redirect_url = add_query_arg(
+            array(
+                'page' => 'wp-debug-viewer',
+                'tab'  => 'settings',
+                'temp_logging_message' => $message,
+            ),
+            admin_url( 'admin.php' )
+        );
+
+        wp_safe_redirect( $redirect_url );
+        exit;
     }
 }

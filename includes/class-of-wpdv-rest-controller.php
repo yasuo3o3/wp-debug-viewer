@@ -77,6 +77,23 @@ class Of_Wpdv_Rest_Controller extends WP_REST_Controller {
                 'permission_callback' => array( $this, 'check_permissions' ),
             )
         );
+
+        register_rest_route(
+            self::REST_NAMESPACE,
+            '/temp-logging',
+            array(
+                array(
+                    'methods'             => WP_REST_Server::CREATABLE,
+                    'callback'            => array( $this, 'enable_temp_logging' ),
+                    'permission_callback' => array( $this, 'check_permissions' ),
+                ),
+                array(
+                    'methods'             => WP_REST_Server::DELETABLE,
+                    'callback'            => array( $this, 'disable_temp_logging' ),
+                    'permission_callback' => array( $this, 'check_permissions' ),
+                ),
+            )
+        );
     }
 
     /**
@@ -245,5 +262,59 @@ class Of_Wpdv_Rest_Controller extends WP_REST_Controller {
         }
 
         return $error;
+    }
+
+    /**
+     * Enable temporary logging (POST /temp-logging).
+     *
+     * @param WP_REST_Request $request Request instance.
+     * @return WP_REST_Response
+     */
+    public function enable_temp_logging( WP_REST_Request $request ) {
+        $settings = $this->plugin->get_settings();
+        $success = $settings->enable_temp_logging();
+
+        if ( ! $success ) {
+            return new WP_Error(
+                'temp_logging_error',
+                __( 'ログ出力設定の変更に失敗しました。', 'wp-debug-viewer' ),
+                array( 'status' => 500 )
+            );
+        }
+
+        return rest_ensure_response(
+            array(
+                'success'     => true,
+                'message'     => __( '一時ログ出力を有効にしました（15分間）。', 'wp-debug-viewer' ),
+                'permissions' => $this->plugin->get_permissions( is_network_admin() ),
+            )
+        );
+    }
+
+    /**
+     * Disable temporary logging (DELETE /temp-logging).
+     *
+     * @param WP_REST_Request $request Request instance.
+     * @return WP_REST_Response
+     */
+    public function disable_temp_logging( WP_REST_Request $request ) {
+        $settings = $this->plugin->get_settings();
+        $success = $settings->disable_temp_logging();
+
+        if ( ! $success ) {
+            return new WP_Error(
+                'temp_logging_error',
+                __( 'ログ出力設定の変更に失敗しました。', 'wp-debug-viewer' ),
+                array( 'status' => 500 )
+            );
+        }
+
+        return rest_ensure_response(
+            array(
+                'success'     => true,
+                'message'     => __( '一時ログ出力を無効にしました。', 'wp-debug-viewer' ),
+                'permissions' => $this->plugin->get_permissions( is_network_admin() ),
+            )
+        );
     }
 }

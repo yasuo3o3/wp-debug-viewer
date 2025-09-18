@@ -87,6 +87,7 @@ class Of_Wpdv_Plugin {
         add_action( 'network_admin_menu', array( $this->admin, 'register_network_menu' ) );
         add_action( 'admin_init', array( $this->admin, 'register_settings' ) );
         add_action( 'admin_enqueue_scripts', array( $this->admin, 'enqueue_assets' ) );
+        add_action( 'init', array( $this, 'maybe_apply_temp_logging' ) );
     }
 
     /**
@@ -105,6 +106,19 @@ class Of_Wpdv_Plugin {
      */
     public function get_log_reader() {
         return $this->log_reader;
+    }
+
+    /**
+     * Apply temporary logging settings if active.
+     *
+     * @return void
+     */
+    public function maybe_apply_temp_logging() {
+        if ( $this->settings->is_temp_logging_active() ) {
+            ini_set( 'log_errors', '1' );
+            ini_set( 'error_log', WP_CONTENT_DIR . '/debug.log' );
+            error_reporting( E_ALL );
+        }
     }
 
     /**
@@ -136,6 +150,7 @@ class Of_Wpdv_Plugin {
         $environment   = wp_get_environment_type();
         $is_production = ( 'production' === $environment );
         $override_active = $this->settings->is_production_override_active();
+        $temp_logging_active = $this->settings->is_temp_logging_active();
         $allow_mutation  = ! $is_production || $override_active;
 
         $can_clear    = $allow_mutation;
@@ -173,6 +188,8 @@ class Of_Wpdv_Plugin {
             'is_production'              => $is_production,
             'override_active'            => $override_active,
             'override_expires'           => $override_active ? (int) $settings['production_temp_expiration'] : 0,
+            'temp_logging_active'        => $temp_logging_active,
+            'temp_logging_expires'       => $temp_logging_active ? (int) $settings['temp_logging_expiration'] : 0,
             'can_view'                   => true,
             'can_clear'                  => $can_clear,
             'can_download'               => $can_download,
