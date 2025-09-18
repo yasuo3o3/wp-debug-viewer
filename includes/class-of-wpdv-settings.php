@@ -22,10 +22,10 @@ class Of_Wpdv_Settings {
      */
     public function get_defaults() {
         return array(
-            'default_lines'              => 500,
-            'default_minutes'            => 15,
-            'max_lines'                  => 1000,
-            'auto_refresh_interval'      => 5,
+            'default_lines'              => 100,
+            'default_minutes'            => 5,
+            'max_lines'                  => 500,
+            'auto_refresh_interval'      => 10,
             'enable_download'            => false,
             'allow_site_actions'         => false,
             'production_temp_expiration' => 0,
