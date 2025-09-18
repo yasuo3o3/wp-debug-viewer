@@ -167,9 +167,10 @@
             return;
         }
         setStatus(__('ダウンロード中…', 'wp-debug-viewer'));
-        window.fetch(data.restUrl + 'download', {
+        apiFetch({
+            path: data.restUrl + 'download',
             headers: getNonceHeaders(),
-            credentials: 'same-origin',
+            parse: false,
         })
             .then(function (response) {
                 if (!response.ok) {

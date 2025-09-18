@@ -559,7 +559,7 @@ class Of_Wpdv_Admin {
         $stats    = $this->plugin->get_log_reader()->get_stats();
 
         return array(
-            'restUrl'   => esc_url_raw( rest_url( 'wp-debug-viewer/v1' ) ),
+            'restUrl'   => 'wp-debug-viewer/v1/',
             'nonce'     => wp_create_nonce( 'wp_rest' ),
             'settings'  => array(
                 'defaultLines'    => (int) $settings['default_lines'],
