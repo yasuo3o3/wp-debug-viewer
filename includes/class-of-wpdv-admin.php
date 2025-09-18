@@ -476,6 +476,7 @@ class Of_Wpdv_Admin {
             echo '<p>' . esc_html__( '本番環境では既定でクリア／ダウンロードは無効です。必要な場合のみ15分間の一時許可を発行できます。', 'wp-debug-viewer' ) . '</p>';
         }
 
+        echo '<div class="of-wpdv-control-row">';
         echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
         wp_nonce_field( 'of_wpdv_toggle_prod_override' );
         echo '<input type="hidden" name="action" value="of_wpdv_toggle_prod_override">';
@@ -487,6 +488,15 @@ class Of_Wpdv_Admin {
             submit_button( __( '15分間許可を発行', 'wp-debug-viewer' ), 'primary', 'submit', false );
         }
         echo '</form>';
+
+        if ( $override_active && $expires ) {
+            echo '<div class="of-wpdv-status-display" data-expires="' . esc_attr( $permissions['override_expires'] ) . '">';
+            echo '<span class="of-wpdv-status-active">' . esc_html__( '有効中:', 'wp-debug-viewer' ) . '</span> ';
+            echo '<span class="of-wpdv-countdown" id="override-countdown"></span>';
+            echo '</div>';
+        }
+
+        echo '</div>';
         echo '</div>';
     }
 
@@ -508,6 +518,7 @@ class Of_Wpdv_Admin {
             echo '<p>' . esc_html__( 'wp-configを変更せずに15分間だけログ出力を有効化できます。', 'wp-debug-viewer' ) . '</p>';
         }
 
+        echo '<div class="of-wpdv-control-row">';
         echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
         wp_nonce_field( 'of_wpdv_toggle_temp_logging' );
         echo '<input type="hidden" name="action" value="of_wpdv_toggle_temp_logging">';
@@ -519,6 +530,15 @@ class Of_Wpdv_Admin {
             submit_button( __( '15分間ログ出力を有効化', 'wp-debug-viewer' ), 'primary', 'submit', false );
         }
         echo '</form>';
+
+        if ( $temp_logging_active && $expires ) {
+            echo '<div class="of-wpdv-status-display" data-expires="' . esc_attr( $permissions['temp_logging_expires'] ) . '">';
+            echo '<span class="of-wpdv-status-active">' . esc_html__( '有効中:', 'wp-debug-viewer' ) . '</span> ';
+            echo '<span class="of-wpdv-countdown" id="temp-logging-countdown"></span>';
+            echo '</div>';
+        }
+
+        echo '</div>';
         echo '</div>';
     }
 

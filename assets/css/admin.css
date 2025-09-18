@@ -88,3 +88,32 @@
 .of-wpdv-card form {
     margin-top: 12px;
 }
+
+.of-wpdv-control-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.of-wpdv-status-display {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    background-color: #e7f7e7;
+    border: 1px solid #4ab866;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.of-wpdv-status-active {
+    font-weight: 600;
+    color: #2d5d31;
+}
+
+.of-wpdv-countdown {
+    font-family: monospace;
+    color: #2d5d31;
+    font-weight: 500;
+}

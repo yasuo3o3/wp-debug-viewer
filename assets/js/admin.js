@@ -237,4 +237,49 @@
     }
 
     initialise();
+    initCountdowns();
 })();
+
+/**
+ * Initialize countdown timers for temporary permissions
+ */
+function initCountdowns() {
+    const countdownElements = document.querySelectorAll('.of-wpdv-countdown');
+
+    countdownElements.forEach(function(element) {
+        const statusDisplay = element.closest('.of-wpdv-status-display');
+        if (!statusDisplay) return;
+
+        const expiresTimestamp = parseInt(statusDisplay.dataset.expires, 10);
+        if (!expiresTimestamp) return;
+
+        function updateCountdown() {
+            const now = Math.floor(Date.now() / 1000);
+            const remaining = expiresTimestamp - now;
+
+            if (remaining <= 0) {
+                // 期限切れ - 要素を隠す
+                statusDisplay.style.display = 'none';
+                return;
+            }
+
+            const minutes = Math.floor(remaining / 60);
+            const seconds = remaining % 60;
+            const timeString = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+
+            element.textContent = timeString + ' 残り';
+        }
+
+        // 初回更新
+        updateCountdown();
+
+        // 1秒ごとに更新
+        const interval = setInterval(updateCountdown, 1000);
+
+        // 期限切れ後にインターバルをクリア
+        setTimeout(function() {
+            clearInterval(interval);
+            statusDisplay.style.display = 'none';
+        }, (expiresTimestamp - Math.floor(Date.now() / 1000)) * 1000);
+    });
+}
