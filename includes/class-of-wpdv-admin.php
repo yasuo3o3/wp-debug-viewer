@@ -315,7 +315,7 @@ class Of_Wpdv_Admin {
         echo '<section class="of-wpdv-viewer" aria-label="' . esc_attr__( 'デバッグログビューアー', 'wp-debug-viewer' ) . '">';
         echo '<header class="of-wpdv-toolbar">';
         echo '<div class="of-wpdv-environment">';
-        printf( '<span class="%1">%2</span>', esc_attr( $badge_class ), esc_html( $badge_label ) );
+        printf( '<span class="%1$s">%2$s</span>', esc_attr( $badge_class ), esc_html( $badge_label ) );
 
         if ( ! empty( $permissions['override_active'] ) && ! empty( $permissions['override_expires'] ) ) {
             $expires = wp_date( 'Y/m/d H:i', (int) $permissions['override_expires'] );
@@ -329,13 +329,13 @@ class Of_Wpdv_Admin {
         echo '<legend class="screen-reader-text">' . esc_html__( '表示モード', 'wp-debug-viewer' ) . '</legend>';
         echo '<label for="of-wpdv-mode-lines"><input type="radio" name="of-wpdv-mode" id="of-wpdv-mode-lines" value="lines" checked> ' . esc_html__( '直近N行', 'wp-debug-viewer' ) . '</label>';
         printf(
-            '<input type="number" id="of-wpdv-lines" class="small-text" min="1" max="%1" step="10" value="%2">',
+            '<input type="number" id="of-wpdv-lines" class="small-text" min="1" max="%1$s" step="10" value="%2$s">',
             esc_attr( $max_lines ),
             esc_attr( (int) $permissions['defaults']['lines'] )
         );
         echo '<label for="of-wpdv-mode-minutes"><input type="radio" name="of-wpdv-mode" id="of-wpdv-mode-minutes" value="minutes"> ' . esc_html__( '直近M分', 'wp-debug-viewer' ) . '</label>';
         printf(
-            '<input type="number" id="of-wpdv-minutes" class="small-text" min="1" max="120" step="1" value="%1">',
+            '<input type="number" id="of-wpdv-minutes" class="small-text" min="1" max="120" step="1" value="%1$s">',
             esc_attr( (int) $permissions['defaults']['minutes'] )
         );
         echo '</fieldset>';
@@ -414,7 +414,7 @@ class Of_Wpdv_Admin {
         $value = isset( $settings[ $key ] ) ? $settings[ $key ] : 0;
 
         printf(
-            '<input type="number" id="%1" name="%2[%3]" value="%4" class="small-text" min="%5" max="%6" step="%7">',
+            '<input type="number" id="%1$s" name="%2$s[%3$s]" value="%4$s" class="small-text" min="%5$s" max="%6$s" step="%7$s">',
             esc_attr( $id ),
             esc_attr( Of_Wpdv_Settings::OPTION_NAME ),
             esc_attr( $key ),
@@ -442,7 +442,7 @@ class Of_Wpdv_Admin {
         $checked = ! empty( $settings[ $key ] );
 
         printf(
-            '<label><input type="checkbox" id="%1" name="%2[%3]" value="1" %4> %5</label>',
+            '<label><input type="checkbox" id="%1$s" name="%2$s[%3$s]" value="1" %4$s> %5$s</label>',
             esc_attr( $id ),
             esc_attr( Of_Wpdv_Settings::OPTION_NAME ),
             esc_attr( $key ),
