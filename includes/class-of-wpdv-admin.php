@@ -290,7 +290,7 @@ class Of_Wpdv_Admin {
             );
 
             printf(
-                '<a href="%1" class="%2">%3</a>',
+                '<a href="%1$s" class="%2$s">%3$s</a>',
                 esc_url( $href ),
                 esc_attr( $class ),
                 esc_html( $label )
