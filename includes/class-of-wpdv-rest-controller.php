@@ -271,7 +271,7 @@ class Of_Wpdv_Rest_Controller extends WP_REST_Controller {
      * @return WP_REST_Response
      */
     public function enable_temp_logging( WP_REST_Request $request ) {
-        $settings = $this->plugin->get_settings();
+        $settings = $this->plugin->get_settings_handler();
         $success = $settings->enable_temp_logging();
 
         if ( ! $success ) {
@@ -298,7 +298,7 @@ class Of_Wpdv_Rest_Controller extends WP_REST_Controller {
      * @return WP_REST_Response
      */
     public function disable_temp_logging( WP_REST_Request $request ) {
-        $settings = $this->plugin->get_settings();
+        $settings = $this->plugin->get_settings_handler();
         $success = $settings->disable_temp_logging();
 
         if ( ! $success ) {

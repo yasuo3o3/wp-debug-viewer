@@ -651,7 +651,7 @@ class Of_Wpdv_Admin {
         }
 
         $state = sanitize_key( $_POST['state'] );
-        $settings = $this->plugin->get_settings();
+        $settings = $this->plugin->get_settings_handler();
 
         if ( 'enable' === $state ) {
             $success = $settings->enable_temp_logging();
